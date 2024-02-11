@@ -131,7 +131,7 @@ async def 스킬문제(ctx):
     Iconability.append(IconabilityC)
     Iconability.append(IconabilityX)
 
-    r=random.sample(range(0,3),1)[0]
+    r=random.sample(range(0,4),1)[0]
     temp = ability[r][i]
     aw = temp.replace(" ","")
     name = ctx.message.author.name
@@ -151,24 +151,29 @@ async def 스킬정답(ctx,a=None):
         if a.title() == answer.get(ctx.message.author):
             await ctx.send("정답입니다!!!")
             with open(f'{rt}.log.txt', 'a',encoding='UTF-8') as f:
-                f.write(f"[{time}] {ctx.message.author} got a quiz right. Quiz's answer was {answer.get(ctx.message.author)}.\n")
+                f.write(f"[{time}] {ctx.message.author} got a quiz right. Quiz's answer was {answer.get(ctx.message.author)}. {ctx.author} got 100 points.\n")
             with open('.\\db.json','r+',encoding='UTF-8') as f:
                 jjj = json.load(f)
                 nnn = {
                     f"{ctx.author.id}":{"points":100}
                 }
                 try:
-                    dump = jjj["Points"][f"{ctx.author.id}"]["points"] + 100
+                    dump = jjj["Points"][0][f"{ctx.author.id}"]["points"] + 100
                     abc = {}
-                    abc[f"{ctx.author.id}"] = []
+                    abc["Points"] = []
                     abc['Points'].append({f"{ctx.author.id}":{"points":dump}})
+                    print(abc) 
                 except KeyError:
                     dump = 100
                     abc = {}
                     abc["Points"] = []
                     abc['Points'].append(nnn)
+                except IndexError:
+                    dump = 100
+                    abc = {}
+                    abc["Points"] = []
+                    abc['Points'].append(nnn)
                 f.seek(0)
-                print(abc)
                 json.dump(abc, f, indent=4)
             answer.pop(ctx.message.author)
         else:
@@ -180,6 +185,19 @@ async def 스킬정답(ctx,a=None):
         await ctx.send("먼저 문제를 받아주세요.")
         with open(f'{rt}.log.txt', 'a',encoding='UTF-8') as f:
                 f.write(f"[{time}] {ctx.message.author} tried to take the quiz. But there was no quiz\n")
+
+@bot.command()
+async def 포인트(ctx):
+    with open(".\\db.json",'r') as f:
+        data = json.load(f)
+        try:
+            point = data["Points"][0][f"{ctx.author.id}"]["points"]
+            await ctx.send(f"{ctx.message.author.name}님의 잔여 포인트는 {point}점 입니다.")
+        except:
+            await ctx.send("포인트가 없습니다")
+    with open(f'{rt}.log.txt', 'a',encoding='UTF-8') as f:
+        f.write(f"[{time}] {ctx.message.author} checked {ctx.author}'s points. {ctx.author}'s points was {point}.\n")
+    
 
 @bot.event
 async def on_message(msg):
