@@ -156,7 +156,7 @@ async def 정답(ctx,a=None):
         else:
             await ctx.send(f"아...\n정답은 {answer.get(ctx.message.author)} 이었습니다...")
             with open(f'{rt}.log.txt', 'a',encoding='UTF-8') as f:
-                f.write(f"[{time}] {ctx.message.author} got a quiz wrong. {ctx.message.author}'s answer was {answer.get(ctx.message.author)}. Quiz's answer was {answer.get(ctx.message.author)}.\n")
+                f.write(f"[{time}] {ctx.message.author} got a quiz wrong. {ctx.message.author}'s answer was {a}. Quiz's answer was {answer.get(ctx.message.author)}.\n")
             answer.pop(ctx.message.author)
     else:
         await ctx.send("먼저 문제를 받아주세요.")
