@@ -185,4 +185,4 @@ async def 스킬정답(ctx,a=None):
 async def on_message(msg):
     await bot.process_commands(msg)
 
-bot.run("MTIwNjE1MTY4MDA3MzQwNDQxNg.GOgmDJ.XACPyI2G-LOPE5u3qHXRXd9UjSByrbJih_1Jbk")
+bot.run("")
