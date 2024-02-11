@@ -103,7 +103,7 @@ async def on_ready():
 global answer
 answer = dict()
 @bot.command(aliases=[""])
-async def 문제(ctx):
+async def 스킬문제(ctx):
     global answer
     global Lresult
     i = random.sample(range(0,len(Lresult[0])-1),1)[0]
@@ -145,7 +145,7 @@ async def 문제(ctx):
     with open(f'{rt}.log.txt', 'a',encoding='UTF-8') as f:
         f.write(f"[{time}] {ctx.message.author} received a quiz. Quiz's answer was {aw}.\n")
 @bot.command()
-async def 정답(ctx,a=None):
+async def 스킬정답(ctx,a=None):
     global answer
     if answer.get(ctx.message.author) != None:
         if a.title() == answer.get(ctx.message.author):
