@@ -107,6 +107,35 @@ async def 스킬문제(ctx):
     global answer
     global Lresult
     if answer.get(ctx.author) != None:
+        await ctx.send("이전문제를 먼저 풀어주세요.\n패널티로 25점이 차감됩니다.")
+        with open('.\\db.json','r+',encoding='UTF-8') as f:
+                jjj = json.load(f)
+                nnn = {
+                    f"{ctx.author.id}":{"points":-25}
+                }
+                try:
+                    dump = jjj["Points"][f"{ctx.author.id}"]["points"] -25
+                    abc = {}
+                    abc["Points"] = {}
+                    jsd = {
+                        f"{ctx.author.id}":{"points":dump}
+                        }
+                    abc["Points"].update(jsd)
+                    print(abc) 
+                except KeyError:
+                    dump = 100
+                    abc = {}
+                    abc["Points"] = {}
+                    abc['Points'].update(nnn)
+                except IndexError:
+                    dump = 100
+                    abc = {}
+                    abc["Points"] = {}
+                    abc['Points'].update(nnn)
+                f.seek(0)
+                json.dump(abc, f, indent=4)
+                #로그 메세지 추가필요. 문제 남아있는데도 새로 받았다는 내용 추가.
+    else:
         i = random.sample(range(0,len(Lresult[0])-1),1)[0]
         agentsIcon = Lresult[5][i]
 
@@ -146,32 +175,6 @@ async def 스킬문제(ctx):
         with open(f'{rt}.log.txt', 'a',encoding='UTF-8') as f:
             f.write(f"[{time}] {ctx.message.author} received a quiz. Quiz's answer was {aw}.\n")
 
-    else:
-        await ctx.send("이전문제를 먼저 풀어주세요.\n패널티로 25점이 차감됩니다.")
-        with open('.\\db.json','r+',encoding='UTF-8') as f:
-                jjj = json.load(f)
-                nnn = {
-                    f"{ctx.author.id}":{"points":25}
-                }
-                try:
-                    dump = jjj["Points"][0][f"{ctx.author.id}"]["points"] -25
-                    abc = {}
-                    abc["Points"] = []
-                    abc['Points'].append({f"{ctx.author.id}":{"points":dump}})
-                    print(abc) 
-                except KeyError:
-                    dump = 100
-                    abc = {}
-                    abc["Points"] = []
-                    abc['Points'].append(nnn)
-                except IndexError:
-                    dump = 100
-                    abc = {}
-                    abc["Points"] = []
-                    abc['Points'].append(nnn)
-                f.seek(0)
-                json.dump(abc, f, indent=4)
-
 
 @bot.command()
 async def 스킬정답(ctx,a=None):
@@ -179,59 +182,65 @@ async def 스킬정답(ctx,a=None):
     if answer.get(ctx.message.author) != None:
         if a.title() == answer.get(ctx.message.author):
             await ctx.send("정답입니다!!! 100점이 지급되었습니다.")
-            with open(f'{rt}.log.txt', 'a',encoding='UTF-8') as f:
-                f.write(f"[{time}] {ctx.message.author} got a quiz right. Quiz's answer was {answer.get(ctx.message.author)}. {ctx.author} got 100 points.\n")
             with open('.\\db.json','r+',encoding='UTF-8') as f:
                 jjj = json.load(f)
                 nnn = {
                     f"{ctx.author.id}":{"points":100}
                 }
                 try:
-                    dump = jjj["Points"][0][f"{ctx.author.id}"]["points"] + 100
+                    dump = jjj["Points"][f"{ctx.author.id}"]["points"] + 100
                     abc = {}
-                    abc["Points"] = []
-                    abc['Points'].append({f"{ctx.author.id}":{"points":dump}})
+                    jsd = {
+                        f"{ctx.author.id}":{"points":dump}
+                        }
+                    abc["Points"] = {}
+                    abc["Points"].update(jsd)
                     print(abc) 
                 except KeyError:
                     dump = 100
                     abc = {}
-                    abc["Points"] = []
-                    abc['Points'].append(nnn)
+                    abc["Points"] = {}
+                    abc['Points'].update(nnn)
                 except IndexError:
                     dump = 100
                     abc = {}
-                    abc["Points"] = []
-                    abc['Points'].append(nnn)
+                    abc["Points"] = {}
+                    abc['Points'].update(nnn)
                 f.seek(0)
                 json.dump(abc, f, indent=4)
+            with open(f'{rt}.log.txt', 'a',encoding='UTF-8') as f:
+                f.write(f"[{time}] {ctx.message.author} got a quiz right. Quiz's answer was {answer.get(ctx.message.author)}. {ctx.author} got 100 points. Now {dump}p.\n")
             answer.pop(ctx.message.author)
         else:
             await ctx.send(f"아...\n패널티로 50점이 차감되었습니다....")
             with open('.\\db.json','r+',encoding='UTF-8') as f:
                 jjj = json.load(f)
                 nnn = {
-                    f"{ctx.author.id}":{"points":50}
+                    f"{ctx.author.id}":{"points":-50}
                 }
                 try:
-                    dump = jjj["Points"][0][f"{ctx.author.id}"]["points"] - 50
+                    dump = jjj["Points"][f"{ctx.author.id}"]["points"] - 50
                     abc = {}
-                    abc["Points"] = []
-                    abc['Points'].append({f"{ctx.author.id}":{"points":dump}})
+                    abc["Points"] = {}
+                    jsd = {
+                        f"{ctx.author.id}":{"points":dump}
+                        }
+                    abc["Points"].update(jsd)
                     print(abc) 
                 except KeyError:
                     dump = 50
                     abc = {}
-                    abc["Points"] = []
-                    abc['Points'].append(nnn)
+                    abc["Points"] = {}
+                    abc['Points'].update(nnn)
                 except IndexError:
                     dump = 50
                     abc = {}
-                    abc["Points"] = []
-                    abc['Points'].append(nnn)
+                    abc["Points"] = {}
+                    abc['Points'].update(nnn)
                 f.seek(0)
                 json.dump(abc, f, indent=4)
             with open(f'{rt}.log.txt', 'a',encoding='UTF-8') as f:
-                f.write(f"[{time}] {ctx.message.author} got a quiz wrong. {ctx.message.author}'s answer was {a}. Quiz's answer was {answer.get(ctx.message.author)}.\n")
+                f.write(f"[{time}] {ctx.message.author} got a quiz wrong. {ctx.message.author}'s answer was {a}. Quiz's answer was {answer.get(ctx.message.author)}. {ctx.author}'s point decrease 50p. Now {dump}p.\n")
             # answer.pop(ctx.message.author)
     else:
         await ctx.send("먼저 문제를 받아주세요.")
@@ -239,11 +248,46 @@ async def 스킬정답(ctx,a=None):
                 f.write(f"[{time}] {ctx.message.author} tried to take the quiz. But there was no quiz\n")
 
 @bot.command()
+async def 스킬문제패스(ctx):
+    global answer
+    player = ctx.author
+    if answer.get(player) != None:
+        await ctx.send(f"문제를 패스하였습니다.\n 정답은 {answer.pop(player)}였습니다.\n 다음문제를 받아 풀어주세요.\n 패널티로 10점이 차감됩니다.")
+        with open('.\\db.json','r+',encoding='UTF-8') as f:
+                jjj = json.load(f)
+                nnn = {
+                    f"{ctx.author.id}":{"points":-10}
+                }
+                try:
+                    dump = jjj["Points"][f"{ctx.author.id}"]["points"] - 10
+                    abc = {}
+                    abc["Points"] = {}
+                    abc['Points'].update({f"{ctx.author.id}":{"points":dump}})
+                    print(abc) 
+                except KeyError:
+                    dump = 50
+                    abc = {}
+                    abc["Points"] = {}
+                    abc['Points'].update(nnn)
+                except IndexError:
+                    dump = 50
+                    abc = {}
+                    abc["Points"] = {}
+                    abc['Points'].update(nnn)
+                f.seek(0)
+                json.dump(abc, f, indent=4)
+        with open(f'{rt}.log.txt', 'a',encoding='UTF-8') as f:
+            f.write(f"[{time}] {ctx.message.author} passed a quiz. Quiz's answer was {answer.get(ctx.message.author)}. {ctx.author}'s point decrease 10p. Now {dump}p.\n")
+    else:
+        await ctx.send("패스할 문제가 없습니다. \"!스킬문제\"로 문제를 받아 풀어보세요.")
+
+@bot.command()
 async def 포인트(ctx):
     with open(".\\db.json",'r') as f:
         data = json.load(f)
+        print(data)
         try:
-            point = data["Points"][0][f"{ctx.author.id}"]["points"]
+            point = data["Points"][f"{ctx.author.id}"]["points"]
             await ctx.send(f"{ctx.message.author.name}님의 잔여 포인트는 {point}점 입니다.")
         except:
             await ctx.send("포인트가 없습니다")
