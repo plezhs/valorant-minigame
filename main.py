@@ -75,14 +75,14 @@ async def on_ready():
 
     response = requests.get(url, params=parameters)
     data = response.json()["data"]
-    with open('.\\db.json','r',encoding='UTF-8') as f:
+    with open('.\\agent.json','r',encoding='UTF-8') as f:
         dbdata = json.load(f)
     for agent in data:
         Lname.append(agent["displayName"])
-        abilistiesQ.append(dbdata[agent["displayName"]]['abQ'])
-        abilistiesE.append(dbdata[agent["displayName"]]['abE'])
-        abilistiesC.append(dbdata[agent["displayName"]]['abC'])
-        abilistiesX.append(dbdata[agent["displayName"]]['abX'])
+        abilistiesQ.append(dbdata["Agents"][agent["displayName"]]['abQ'])
+        abilistiesE.append(dbdata["Agents"][agent["displayName"]]['abE'])
+        abilistiesC.append(dbdata["Agents"][agent["displayName"]]['abC'])
+        abilistiesX.append(dbdata["Agents"][agent["displayName"]]['abX'])
         Licon.append(agent["displayIcon"])
         Limg.append(agent["bustPortrait"])
         IconabilistiesQ.append(isQ(agent))
@@ -152,6 +152,24 @@ async def 스킬정답(ctx,a=None):
             await ctx.send("정답입니다!!!")
             with open(f'{rt}.log.txt', 'a',encoding='UTF-8') as f:
                 f.write(f"[{time}] {ctx.message.author} got a quiz right. Quiz's answer was {answer.get(ctx.message.author)}.\n")
+            with open('.\\db.json','r+',encoding='UTF-8') as f:
+                jjj = json.load(f)
+                nnn = {
+                    f"{ctx.author.id}":{"points":100}
+                }
+                try:
+                    dump = jjj["Points"][f"{ctx.author.id}"]["points"] + 100
+                    abc = {}
+                    abc[f"{ctx.author.id}"] = []
+                    abc['Points'].append({f"{ctx.author.id}":{"points":dump}})
+                except KeyError:
+                    dump = 100
+                    abc = {}
+                    abc["Points"] = []
+                    abc['Points'].append(nnn)
+                f.seek(0)
+                print(abc)
+                json.dump(abc, f, indent=4)
             answer.pop(ctx.message.author)
         else:
             await ctx.send(f"아...\n정답은 {answer.get(ctx.message.author)} 이었습니다...")
@@ -167,4 +185,4 @@ async def 스킬정답(ctx,a=None):
 async def on_message(msg):
     await bot.process_commands(msg)
 
-bot.run("")
+bot.run("MTIwNjE1MTY4MDA3MzQwNDQxNg.GOgmDJ.XACPyI2G-LOPE5u3qHXRXd9UjSByrbJih_1Jbk")
