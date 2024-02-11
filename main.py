@@ -10,7 +10,7 @@ time = datetime.datetime.now()
 
 rt =str(time)[0:10]
 with open(f'{rt}.log.txt', 'a') as f:
-    f.write(f"[{time}]--------------------------------------------------\n[{rt}]Bot Started\n[{rt}]--------------------------------------------------\n")
+    f.write(f"[{time}]--------------------------------------------------\n[{time}]Bot Started\n[{time}]--------------------------------------------------\n")
 
 bot = commands.Bot(command_prefix="!",intents=discord.Intents.all())
 
