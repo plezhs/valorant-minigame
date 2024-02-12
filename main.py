@@ -243,8 +243,8 @@ async def 스킬정답(ctx,a=None):
                     abc["Points"] = {}
                     abc["Points"].update(nnn)
                 f.seek(0)
-                json.dump(abc, f, indent=4)
-            with open(f'{rt}.log.txt', 'a',encoding='UTF-8',ensure_ascii=False) as f:
+                json.dump(abc, f, indent=4,ensure_ascii=False)
+            with open(f'{rt}.log.txt', 'a',encoding='UTF-8') as f:
                 f.write(f"[{time}] {ctx.message.author} got a quiz wrong. {ctx.message.author}'s answer was {a}. Quiz's answer was {answer.get(ctx.message.author)}. {ctx.author}'s point decrease 50p. Now {dump}p.\n")
             # answer.pop(ctx.message.author)
     else:
@@ -280,8 +280,8 @@ async def 스킬문제패스(ctx):
                     abc["Points"] = {}
                     abc["Points"].update(nnn)
                 f.seek(0)
-                json.dump(abc, f, indent=4)
-        with open(f'{rt}.log.txt', 'a',encoding='UTF-8',ensure_ascii=False) as f:
+                json.dump(abc, f, indent=4,ensure_ascii=False)
+        with open(f'{rt}.log.txt', 'a',encoding='UTF-8') as f:
             f.write(f"[{time}] {ctx.message.author} passed a quiz. Quiz's answer was {answer.get(ctx.message.author)}. {ctx.author}'s point decrease 10p. Now {dump}p.\n")
     else:
         await ctx.send("패스할 문제가 없습니다. \"!스킬문제\"로 문제를 받아 풀어보세요.")
@@ -292,7 +292,7 @@ async def 포인트(ctx):
         data = json.load(f)
         print(data)
         try:
-            point = data["Points"][f"{ctx.author.id}"]
+            point = data["Points"][f"{ctx.author.id}"]["points"]
             await ctx.send(f"{ctx.message.author.name}님의 잔여 포인트는 {point}점 입니다.")
         except:
             await ctx.send("포인트가 없습니다")
