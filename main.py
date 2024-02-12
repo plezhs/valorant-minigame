@@ -114,24 +114,24 @@ async def 스킬문제(ctx):
                     f"{ctx.author.id}": -25
                 }
                 try:
-                    dump = jjj["Points"][f"{ctx.author.id}"] -25
+                    dump = jjj["Points"][0][f"{ctx.author.id}"] -25
                     abc = {}
-                    abc["Points"] = {}
+                    abc["Points"] = []
                     jsd = {
                         f"{ctx.author.id}":dump
                         }
-                    abc["Points"].update(jsd)
+                    abc["Points"].append(jsd)
                     print(abc) 
                 except KeyError:
                     dump = 100
                     abc = {}
-                    abc["Points"] = {}
-                    abc["Points"].update(nnn)
+                    abc["Points"] = []
+                    abc["Points"].append(nnn)
                 except IndexError:
                     dump = 100
                     abc = {}
-                    abc["Points"] = {}
-                    abc["Points"].update(nnn)
+                    abc["Points"] = []
+                    abc["Points"].append(nnn)
                 f.seek(0)
                 json.dump(abc, f, indent=4,ensure_ascii=False)
                 #로그 메세지 추가필요. 문제 남아있는데도 새로 받았다는 내용 추가.
@@ -193,24 +193,24 @@ async def 스킬정답(ctx,a=None):
                     f"{ctx.author.id}":100
                 }
                 try:
-                    dump = jjj["Points"][f"{ctx.author.id}"] + 100
+                    dump = jjj["Points"][0][f"{ctx.author.id}"] + 100
                     abc = {}
                     jsd = {
                         f"{ctx.author.id}":dump
                         }
-                    abc["Points"] = {}
-                    abc["Points"].update(jsd)
+                    abc["Points"] = []
+                    abc["Points"].append(jsd)
                     print(abc) 
                 except KeyError:
                     dump = 100
                     abc = {}
-                    abc["Points"] = {}
-                    abc["Points"].update(nnn)
+                    abc["Points"] = []
+                    abc["Points"].append(nnn)
                 except IndexError:
                     dump = 100
                     abc = {}
-                    abc["Points"] = {}
-                    abc["Points"].update(nnn)
+                    abc["Points"] = []
+                    abc["Points"].append(nnn)
                 f.seek(0)
                 json.dump(abc, f, indent=4,ensure_ascii=False)
             with open(f'{rt}.log.txt', 'a',encoding='UTF-8') as f:
@@ -224,24 +224,24 @@ async def 스킬정답(ctx,a=None):
                     f"{ctx.author.id}": -50
                 }
                 try:
-                    dump = jjj["Points"][f"{ctx.author.id}"] - 50
+                    dump = jjj["Points"][0][f"{ctx.author.id}"] - 50
                     abc = {}
-                    abc["Points"] = {}
+                    abc["Points"] = []
                     jsd = {
                         f"{ctx.author.id}": dump
                         }
-                    abc["Points"].update(jsd)
+                    abc["Points"].append(jsd)
                     print(abc) 
                 except KeyError:
                     dump = 50
                     abc = {}
-                    abc["Points"] = {}
-                    abc["Points"].update(nnn)
+                    abc["Points"] = []
+                    abc["Points"].append(nnn)
                 except IndexError:
                     dump = 50
                     abc = {}
-                    abc["Points"] = {}
-                    abc["Points"].update(nnn)
+                    abc["Points"] = []
+                    abc["Points"].append(nnn)
                 f.seek(0)
                 json.dump(abc, f, indent=4,ensure_ascii=False)
             with open(f'{rt}.log.txt', 'a',encoding='UTF-8') as f:
@@ -264,21 +264,21 @@ async def 스킬문제패스(ctx):
                     f"{ctx.author.id}": -10
                 }
                 try:
-                    dump = jjj["Points"][f"{ctx.author.id}"] - 10
+                    dump = jjj["Points"][0][f"{ctx.author.id}"] - 10
                     abc = {}
-                    abc["Points"] = {}
-                    abc["Points"].update({f"{ctx.author.id}": dump})
+                    abc["Points"] = []
+                    abc["Points"].append({f"{ctx.author.id}": dump})
                     print(abc) 
                 except KeyError:
                     dump = 10
                     abc = {}
-                    abc["Points"] = {}
-                    abc["Points"].update(nnn)
+                    abc["Points"] = []
+                    abc["Points"].append(nnn)
                 except IndexError:
                     dump = 10
                     abc = {}
-                    abc["Points"] = {}
-                    abc["Points"].update(nnn)
+                    abc["Points"] = []
+                    abc["Points"].append(nnn)
                 f.seek(0)
                 json.dump(abc, f, indent=4,ensure_ascii=False)
         with open(f'{rt}.log.txt', 'a',encoding='UTF-8') as f:
@@ -292,7 +292,7 @@ async def 포인트(ctx):
         data = json.load(f)
         print(data)
         try:
-            point = data["Points"][f"{ctx.author.id}"]
+            point = data["Points"][0][f"{ctx.author.id}"]
             await ctx.send(f"{ctx.message.author.name}님의 잔여 포인트는 {point}점 입니다.")
         except:
             await ctx.send("포인트가 없습니다")
@@ -304,4 +304,4 @@ async def 포인트(ctx):
 async def on_message(msg):
     await bot.process_commands(msg)
 
-bot.run("")
+bot.run("MTIwNjE1MTY4MDA3MzQwNDQxNg.G2Iau4.w8uVaB31kI_xVZbJfmKRUnfxKYAk-YDX5U5MrY")
