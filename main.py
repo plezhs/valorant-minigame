@@ -111,14 +111,14 @@ async def 스킬문제(ctx):
         with open('.\\db.json','r+',encoding='UTF-8') as f:
                 jjj = json.load(f)
                 nnn = {
-                    f"{ctx.author.id}":{"points":-25}
+                    f"{ctx.author.id}": -25
                 }
                 try:
-                    dump = jjj["Points"][f"{ctx.author.id}"]["points"] -25
+                    dump = jjj["Points"][f"{ctx.author.id}"] -25
                     abc = {}
                     abc["Points"] = {}
                     jsd = {
-                        f"{ctx.author.id}":{"points":dump}
+                        f"{ctx.author.id}":dump
                         }
                     abc["Points"].update(jsd)
                     print(abc) 
@@ -133,7 +133,7 @@ async def 스킬문제(ctx):
                     abc["Points"] = {}
                     abc["Points"].update(nnn)
                 f.seek(0)
-                json.dump(abc, f, indent=4)
+                json.dump(abc, f, indent=4,ensure_ascii=False)
                 #로그 메세지 추가필요. 문제 남아있는데도 새로 받았다는 내용 추가.
     else:
         agents =list()
@@ -190,13 +190,13 @@ async def 스킬정답(ctx,a=None):
             with open('.\\db.json','r+',encoding='UTF-8') as f:
                 jjj = json.load(f)
                 nnn = {
-                    f"{ctx.author.id}":{"points":100}
+                    f"{ctx.author.id}":100
                 }
                 try:
-                    dump = jjj["Points"][f"{ctx.author.id}"]["points"] + 100
+                    dump = jjj["Points"][f"{ctx.author.id}"] + 100
                     abc = {}
                     jsd = {
-                        f"{ctx.author.id}":{"points":dump}
+                        f"{ctx.author.id}":dump
                         }
                     abc["Points"] = {}
                     abc["Points"].update(jsd)
@@ -212,7 +212,7 @@ async def 스킬정답(ctx,a=None):
                     abc["Points"] = {}
                     abc["Points"].update(nnn)
                 f.seek(0)
-                json.dump(abc, f, indent=4)
+                json.dump(abc, f, indent=4,ensure_ascii=False)
             with open(f'{rt}.log.txt', 'a',encoding='UTF-8') as f:
                 f.write(f"[{time}] {ctx.message.author} got a quiz right. Quiz's answer was {answer.get(ctx.message.author)}. {ctx.author} got 100 points. Now {dump}p.\n")
             answer.pop(ctx.message.author)
@@ -221,14 +221,14 @@ async def 스킬정답(ctx,a=None):
             with open('.\\db.json','r+',encoding='UTF-8') as f:
                 jjj = json.load(f)
                 nnn = {
-                    f"{ctx.author.id}":{"points":-50}
+                    f"{ctx.author.id}": -50
                 }
                 try:
-                    dump = jjj["Points"][f"{ctx.author.id}"]["points"] - 50
+                    dump = jjj["Points"][f"{ctx.author.id}"] - 50
                     abc = {}
                     abc["Points"] = {}
                     jsd = {
-                        f"{ctx.author.id}":{"points":dump}
+                        f"{ctx.author.id}": dump
                         }
                     abc["Points"].update(jsd)
                     print(abc) 
@@ -244,7 +244,7 @@ async def 스킬정답(ctx,a=None):
                     abc["Points"].update(nnn)
                 f.seek(0)
                 json.dump(abc, f, indent=4)
-            with open(f'{rt}.log.txt', 'a',encoding='UTF-8') as f:
+            with open(f'{rt}.log.txt', 'a',encoding='UTF-8',ensure_ascii=False) as f:
                 f.write(f"[{time}] {ctx.message.author} got a quiz wrong. {ctx.message.author}'s answer was {a}. Quiz's answer was {answer.get(ctx.message.author)}. {ctx.author}'s point decrease 50p. Now {dump}p.\n")
             # answer.pop(ctx.message.author)
     else:
@@ -261,13 +261,13 @@ async def 스킬문제패스(ctx):
         with open('.\\db.json','r+',encoding='UTF-8') as f:
                 jjj = json.load(f)
                 nnn = {
-                    f"{ctx.author.id}":{"points":-10}
+                    f"{ctx.author.id}": -10
                 }
                 try:
-                    dump = jjj["Points"][f"{ctx.author.id}"]["points"] - 10
+                    dump = jjj["Points"][f"{ctx.author.id}"] - 10
                     abc = {}
                     abc["Points"] = {}
-                    abc["Points"].update({f"{ctx.author.id}":{"points":dump}})
+                    abc["Points"].update({f"{ctx.author.id}": dump})
                     print(abc) 
                 except KeyError:
                     dump = 10
@@ -281,7 +281,7 @@ async def 스킬문제패스(ctx):
                     abc["Points"].update(nnn)
                 f.seek(0)
                 json.dump(abc, f, indent=4)
-        with open(f'{rt}.log.txt', 'a',encoding='UTF-8') as f:
+        with open(f'{rt}.log.txt', 'a',encoding='UTF-8',ensure_ascii=False) as f:
             f.write(f"[{time}] {ctx.message.author} passed a quiz. Quiz's answer was {answer.get(ctx.message.author)}. {ctx.author}'s point decrease 10p. Now {dump}p.\n")
     else:
         await ctx.send("패스할 문제가 없습니다. \"!스킬문제\"로 문제를 받아 풀어보세요.")
