@@ -304,4 +304,4 @@ async def 포인트(ctx):
 async def on_message(msg):
     await bot.process_commands(msg)
 
-bot.run("MTIwNjE1MTY4MDA3MzQwNDQxNg.G2Iau4.w8uVaB31kI_xVZbJfmKRUnfxKYAk-YDX5U5MrY")
+bot.run("")
