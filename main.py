@@ -6,6 +6,23 @@ import random
 import requests
 import json
 
+def wjson(data,filename='db.json'):
+    with open(filename,'r+',encoding='UTF-8') as f:
+        file_data = json.load(f)
+        file_data["Points"].update(data)
+        f.seek(0)
+        json.dump(file_data,f,indent=4)
+        print(file_data)
+        print(data)
+def getpoint(id):
+    with open('.\\db.json','r',encoding='UTF-8') as f:
+        data = json.load(f)
+        try:
+            p = data['Points'][f'{id}']
+        except:
+            p = 0
+        return p
+
 time = datetime.datetime.now()
 
 rt =str(time)[0:10]
@@ -108,33 +125,11 @@ async def 스킬문제(ctx):
     global Lresult
     if answer.get(ctx.author) != None:
         await ctx.send("이전문제를 먼저 풀어주세요.\n패널티로 25점이 차감됩니다.")
-        with open('.\\db.json','r+',encoding='UTF-8') as f:
-                jjj = json.load(f)
-                nnn = {
-                    f"{ctx.author.id}": -25
-                }
-                try:
-                    dump = jjj["Points"][0][f"{ctx.author.id}"] -25
-                    abc = {}
-                    abc["Points"] = []
-                    jsd = {
-                        f"{ctx.author.id}":dump
-                        }
-                    abc["Points"].append(jsd)
-                    print(abc) 
-                except KeyError:
-                    dump = 100
-                    abc = {}
-                    abc["Points"] = []
-                    abc["Points"].append(nnn)
-                except IndexError:
-                    dump = 100
-                    abc = {}
-                    abc["Points"] = []
-                    abc["Points"].append(nnn)
-                f.seek(0)
-                json.dump(abc, f, indent=4,ensure_ascii=False)
-                #로그 메세지 추가필요. 문제 남아있는데도 새로 받았다는 내용 추가.
+        ndata = {
+            f"{ctx.author.id}": getpoint(ctx.author.id) - 25
+        }
+        wjson(ndata)
+        #로그 메세지 추가필요. 문제 남아있는데도 새로 받았다는 내용 추가.
     else:
         agents =list()
         for k in Lresult[0]:
@@ -186,69 +181,25 @@ async def 스킬정답(ctx,a=None):
     global answer
     if answer.get(ctx.message.author) != None:
         if a.title() == answer.get(ctx.message.author):
-            await ctx.send("정답입니다!!! 100점이 지급되었습니다.")
-            with open('.\\db.json','r+',encoding='UTF-8') as f:
-                jjj = json.load(f)
-                nnn = {
-                    f"{ctx.author.id}":100
-                }
-                try:
-                    dump = jjj["Points"][0][f"{ctx.author.id}"] + 100
-                    abc = {}
-                    jsd = {
-                        f"{ctx.author.id}":dump
-                        }
-                    abc["Points"] = []
-                    abc["Points"].append(jsd)
-                    print(abc) 
-                except KeyError:
-                    dump = 100
-                    abc = {}
-                    abc["Points"] = []
-                    abc["Points"].append(nnn)
-                except IndexError:
-                    dump = 100
-                    abc = {}
-                    abc["Points"] = []
-                    abc["Points"].append(nnn)
-                f.seek(0)
-                json.dump(abc, f, indent=4,ensure_ascii=False)
+            await ctx.send(f"{ctx.author.mention}\n정답입니다!!! 100점이 지급되었습니다.")
+            ndata = {
+            f"{ctx.author.id}": getpoint(ctx.author.id) + 100
+            }
+            wjson(ndata)
             with open(f'{rt}.log.txt', 'a',encoding='UTF-8') as f:
-                f.write(f"[{time}] {ctx.message.author} got a quiz right. Quiz's answer was {answer.get(ctx.message.author)}. {ctx.author} got 100 points. Now {dump}p.\n")
+                f.write(f"[{time}] {ctx.message.author} got a quiz right. Quiz's answer was {answer.get(ctx.message.author)}. {ctx.author} got 100 points.\n")
             answer.pop(ctx.message.author)
         else:
-            await ctx.send(f"아...\n패널티로 50점이 차감되었습니다....")
-            with open('.\\db.json','r+',encoding='UTF-8') as f:
-                jjj = json.load(f)
-                nnn = {
-                    f"{ctx.author.id}": -50
-                }
-                try:
-                    dump = jjj["Points"][0][f"{ctx.author.id}"] - 50
-                    abc = {}
-                    abc["Points"] = []
-                    jsd = {
-                        f"{ctx.author.id}": dump
-                        }
-                    abc["Points"].append(jsd)
-                    print(abc) 
-                except KeyError:
-                    dump = 50
-                    abc = {}
-                    abc["Points"] = []
-                    abc["Points"].append(nnn)
-                except IndexError:
-                    dump = 50
-                    abc = {}
-                    abc["Points"] = []
-                    abc["Points"].append(nnn)
-                f.seek(0)
-                json.dump(abc, f, indent=4,ensure_ascii=False)
+            await ctx.send(f"{ctx.author.mention}\n아...\n패널티로 50점이 차감되었습니다....")
+            ndata = {
+            f"{ctx.author.id}": getpoint(ctx.author.id) - 50
+            }
+            wjson(ndata)
             with open(f'{rt}.log.txt', 'a',encoding='UTF-8') as f:
-                f.write(f"[{time}] {ctx.message.author} got a quiz wrong. {ctx.message.author}'s answer was {a}. Quiz's answer was {answer.get(ctx.message.author)}. {ctx.author}'s point decrease 50p. Now {dump}p.\n")
+                f.write(f"[{time}] {ctx.message.author} got a quiz wrong. {ctx.message.author}'s answer was {a}. Quiz's answer was {answer.get(ctx.message.author)}. {ctx.author}'s point decrease 50p.\n")
             # answer.pop(ctx.message.author)
     else:
-        await ctx.send("먼저 문제를 받아주세요.")
+        await ctx.send(f"{ctx.author.mention}\n먼저 문제를 받아주세요.")
         with open(f'{rt}.log.txt', 'a',encoding='UTF-8') as f:
                 f.write(f"[{time}] {ctx.message.author} tried to take the quiz. But there was no quiz\n")
 
@@ -258,44 +209,19 @@ async def 스킬문제패스(ctx):
     player = ctx.author
     if answer.get(player) != None:
         await ctx.send(f"문제를 패스하였습니다.\n 정답은 {answer.pop(player)}였습니다.\n 다음문제를 받아 풀어주세요.\n 패널티로 10점이 차감됩니다.")
-        with open('.\\db.json','r+',encoding='UTF-8') as f:
-                jjj = json.load(f)
-                nnn = {
-                    f"{ctx.author.id}": -10
-                }
-                try:
-                    dump = jjj["Points"][0][f"{ctx.author.id}"] - 10
-                    abc = {}
-                    abc["Points"] = []
-                    abc["Points"].append({f"{ctx.author.id}": dump})
-                    print(abc) 
-                except KeyError:
-                    dump = 10
-                    abc = {}
-                    abc["Points"] = []
-                    abc["Points"].append(nnn)
-                except IndexError:
-                    dump = 10
-                    abc = {}
-                    abc["Points"] = []
-                    abc["Points"].append(nnn)
-                f.seek(0)
-                json.dump(abc, f, indent=4,ensure_ascii=False)
+        ndata = {
+            f"{ctx.author.id}": getpoint(ctx.author.id) - 10
+        }
+        wjson(ndata)
         with open(f'{rt}.log.txt', 'a',encoding='UTF-8') as f:
-            f.write(f"[{time}] {ctx.message.author} passed a quiz. Quiz's answer was {answer.get(ctx.message.author)}. {ctx.author}'s point decrease 10p. Now {dump}p.\n")
+            f.write(f"[{time}] {ctx.message.author} passed a quiz. Quiz's answer was {answer.get(ctx.message.author)}. {ctx.author}'s point decrease 10p.\n")
     else:
         await ctx.send("패스할 문제가 없습니다. \"!스킬문제\"로 문제를 받아 풀어보세요.")
 
 @bot.command()
 async def 포인트(ctx):
-    with open(".\\db.json",'r') as f:
-        data = json.load(f)
-        print(data)
-        try:
-            point = data["Points"][0][f"{ctx.author.id}"]
-            await ctx.send(f"{ctx.message.author.name}님의 잔여 포인트는 {point}점 입니다.")
-        except:
-            await ctx.send("포인트가 없습니다")
+    point = getpoint(ctx.author.id)
+    await ctx.send(f"{ctx.author.mention}\n{ctx.message.author.name}님의 잔여 포인트는 {point}점 입니다.")
     with open(f'{rt}.log.txt', 'a',encoding='UTF-8') as f:
         f.write(f"[{time}] {ctx.message.author} checked {ctx.author}'s points. {ctx.author}'s points was {point}.\n")
     
