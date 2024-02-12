@@ -265,12 +265,12 @@ async def 스킬문제패스(ctx):
                     abc['Points'].update({f"{ctx.author.id}":{"points":dump}})
                     print(abc) 
                 except KeyError:
-                    dump = 50
+                    dump = 10
                     abc = {}
                     abc["Points"] = {}
                     abc['Points'].update(nnn)
                 except IndexError:
-                    dump = 50
+                    dump = 10
                     abc = {}
                     abc["Points"] = {}
                     abc['Points'].update(nnn)
