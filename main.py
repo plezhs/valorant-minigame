@@ -136,7 +136,12 @@ async def 스킬문제(ctx):
                 json.dump(abc, f, indent=4)
                 #로그 메세지 추가필요. 문제 남아있는데도 새로 받았다는 내용 추가.
     else:
-        i = random.sample(range(0,len(Lresult[0])-1),1)[0]
+        agents =list()
+        for k in Lresult[0]:
+            agents.append(k)
+        random.shuffle(agents)
+        tempa = random.sample(range(0,len(Lresult[0])-1),1)[0]
+        i = Lresult[0].index(agents[tempa])
         agentsIcon = Lresult[5][i]
 
         abilityQ = Lresult[1]
