@@ -292,7 +292,7 @@ async def 포인트(ctx):
         data = json.load(f)
         print(data)
         try:
-            point = data["Points"][f"{ctx.author.id}"]["points"]
+            point = data["Points"][f"{ctx.author.id}"]
             await ctx.send(f"{ctx.message.author.name}님의 잔여 포인트는 {point}점 입니다.")
         except:
             await ctx.send("포인트가 없습니다")
