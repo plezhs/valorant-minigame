@@ -120,7 +120,7 @@ async def on_ready():
 global answer
 answer = dict()
 @bot.command(aliases=[""])
-async def 스킬문제(ctx):
+async def 문제(ctx):
     global answer
     global Lresult
     if answer.get(ctx.author) != None:
@@ -177,7 +177,7 @@ async def 스킬문제(ctx):
 
 
 @bot.command()
-async def 스킬정답(ctx,a=None):
+async def 정답(ctx,a=None):
     global answer
     if answer.get(ctx.message.author) != None:
         if a.title() == answer.get(ctx.message.author):
@@ -204,7 +204,7 @@ async def 스킬정답(ctx,a=None):
                 f.write(f"[{time}] {ctx.message.author} tried to take the quiz. But there was no quiz\n")
 
 @bot.command()
-async def 스킬문제패스(ctx):
+async def 문제패스(ctx):
     global answer
     player = ctx.author
     if answer.get(player) != None:
