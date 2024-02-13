@@ -26,7 +26,7 @@ def getpoint(id):
 time = datetime.datetime.now()
 
 rt =str(time)[0:10]
-with open(f'{rt}.log.txt', 'a') as f:
+with open(f'{rt}.log.txt', 'a',encoding='UTF-8') as f:
     f.write(f"[{time}]--------------------------------------------------\n[{time}]Bot Started\n[{time}]--------------------------------------------------\n")
 
 bot = commands.Bot(command_prefix="!",intents=discord.Intents.all())
