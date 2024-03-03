@@ -118,7 +118,7 @@ async def on_ready():
     Lresult.append(IconabilistiesX)
 
 def rr():
-    random.seed(random.sample(range(0,2147483648),1))
+    random.seed(random.sample(range(0,2147483648),1)[0])
     r=random.sample(range(0,4),1)[0]
     return r
 
