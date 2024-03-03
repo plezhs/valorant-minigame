@@ -117,6 +117,11 @@ async def on_ready():
     Lresult.append(IconabilistiesC)
     Lresult.append(IconabilistiesX)
 
+def rr():
+    random.seed(random.sample(range(0,2147483648),1))
+    r=random.sample(range(0,4),1)[0]
+    return r
+
 global answer
 answer = dict()
 @bot.command(aliases=[""])
@@ -160,8 +165,7 @@ async def 문제(ctx):
         Iconability.append(IconabilityE)
         Iconability.append(IconabilityC)
         Iconability.append(IconabilityX)
-
-        r=random.sample(range(0,4),1)[0]
+        r =rr()
         temp = ability[r][i]
         aw = temp.replace(" ","")
         name = ctx.message.author.name
