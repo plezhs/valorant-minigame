@@ -134,7 +134,8 @@ async def 문제(ctx):
             f"{ctx.author.id}": getpoint(ctx.author.id) - 25
         }
         wjson(ndata)
-        #로그 메세지 추가필요. 문제 남아있는데도 새로 받았다는 내용 추가.
+        with open(f'{rt}.log.txt', 'a',encoding='UTF-8') as f:
+            f.write(f"[{time}] {ctx.message.author} passed the question.\n{ctx.message.author}'s point was subtracted 25 point.\n")#로그 메세지 추가필요. 문제 남아있는데도 새로 받았다는 내용 추가.
     else:
         agents =list()
         for k in Lresult[0]:
@@ -228,7 +229,10 @@ async def 포인트(ctx):
     await ctx.send(f"{ctx.author.mention}\n{ctx.message.author.name}님의 잔여 포인트는 {point}점 입니다.")
     with open(f'{rt}.log.txt', 'a',encoding='UTF-8') as f:
         f.write(f"[{time}] {ctx.message.author} checked {ctx.author}'s points. {ctx.author}'s points was {point}.\n")
-    
+
+@bot.command()
+async def test(ctx):
+    await ctx.send("")
 
 @bot.event
 async def on_message(msg):
